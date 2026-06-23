@@ -6,12 +6,9 @@ This repository contains a Jupyter Notebook-based project for exploring mechanis
 
 The notebook in this repository investigates how a transformer model processes information internally by:
 
-- installing and setting up the required machine learning libraries;
-- attaching hooks to model layers to inspect residual stream activations;
-- analyzing logit differences for secure vs. insecure code-related completions;
-- applying activation steering techniques to influence model behavior;
-- studying attention pattern shifts across layers;
-- visualizing intermediate representations and model internals.
+- Find out the layer that is causing the activation.
+- Perform Intervention of the activation.
+- Try the same thing on MLM (Medium language model)
 
 This work is framed around mechanistic interpretability and is intended as a practical exploration of how internal model components contribute to behavior.
 
@@ -35,26 +32,20 @@ This work is framed around mechanistic interpretability and is intended as a pra
    python -m venv .venv
    source .venv/bin/activate
    ```
-
+4.  Open the notebook:
+   ```bash
+   jupyter notebook
+   ```
+   
 3. Install the required dependencies:
    ```bash
    pip install -U pip
    pip install torch transformers transformer_lens einops numpy matplotlib plotly jupyter
    ```
-
-4. Open the notebook:
-   ```bash
-   jupyter notebook
-   ```
-
+   
 5. Open `MechInterp.ipynb` and run the cells sequentially.
 
-## Notes
-
-- The notebook uses GPT-2 small (`gpt2-small`) and the TransformerLens library for internal model inspection.
-- Some cells may require GPU support for faster execution, but CPU execution is also possible.
-- The project is designed as an exploratory notebook rather than a packaged Python module.
 
 ## Purpose
 
-This repository serves as a hands-on example of mechanistic interpretability research, combining model inspection, activation analysis, and interpretability visualizations in a single workflow.
+This repository serves as Intent analysis framework for figuring out security threats that are produced by prompt engineering.
