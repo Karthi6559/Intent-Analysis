@@ -7,7 +7,7 @@ This repository contains a Jupyter Notebook-based project for exploring mechanis
 The notebook in this repository investigates how a transformer model processes information internally by:
 
 - Find out the layer that is causing the activation.
-- Perform Intervention of the activation.
+- Perform Intervention of the Layer.
 - Try the same thing on MLM (Medium language model)
 
 This work is framed around mechanistic interpretability and is intended as a practical exploration of how internal model components contribute to behavior.
