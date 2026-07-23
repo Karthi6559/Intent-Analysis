@@ -6,6 +6,7 @@
     "insecure_prompt": "import hashlib",
     "source": "dataset"
   },
+  
   {
     "id": "A-002",
     "cwe": "CWE-327",
@@ -64,21 +65,21 @@
   },
   {
     "id": "C-001",
-    "cwe": "CWE-089 (pattern)",
+    "cwe": "CWE-089",
     "secure_prompt": "cursor.execute('SELECT id, username, email FROM users WHERE username = ?",
     "insecure_prompt": "cursor.execute('SELECT id, username, email FROM users WHERE username = '",
     "source": "authored"
   },
   {
     "id": "C-002",
-    "cwe": "CWE-732 (pattern)",
+    "cwe": "CWE-732 ",
     "secure_prompt": "resource \"aws_s3_bucket_acl\" \"example\" {\n  bucket = aws_s3_bucket.example.id\n  acl    = \"private",
     "insecure_prompt": "resource \"aws_s3_bucket_acl\" \"example\" {\n  bucket = aws_s3_bucket.example.id\n  acl    = \"public",
     "source": "authored"
   },
   {
     "id": "C-003",
-    "cwe": "CWE-918 (pattern)",
+    "cwe": "CWE-918 ",
     "secure_prompt": "def fetch_internal(url: str) -> str:\n    if",
     "insecure_prompt": "def fetch_internal(url: str) -> str:\n    return",
     "source": "authored"
