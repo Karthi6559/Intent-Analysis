@@ -63,6 +63,7 @@
     "insecure_prompt": "response.set_cookie('session_id', session_id)",
     "source": "dataset"
   },
+
   {
     "id": "C-001",
     "cwe": "CWE-089",
@@ -72,13 +73,23 @@
   },
   {
     "id": "C-002",
-    "cwe": "CWE-732 ",
+    "cwe": "CWE-732 - example ",
     "secure_prompt": "resource \"aws_s3_bucket_acl\" \"example\" {\n  bucket = aws_s3_bucket.example.id\n  acl    = \"private",
     "insecure_prompt": "resource \"aws_s3_bucket_acl\" \"example\" {\n  bucket = aws_s3_bucket.example.id\n  acl    = \"public",
     "source": "authored"
   },
+
   {
     "id": "C-003",
+    "cwe": "CWE-732 - data lake ",
+    "secure_prompt": "resource \"aws_s3_bucket_acl\" \"data_lake\" {\n  bucket = aws_s3_bucket.example.id\n  acl    = \"private",
+    "insecure_prompt": "resource \"aws_s3_bucket_acl\" \"data_lake\" {\n  bucket = aws_s3_bucket.example.id\n  acl    = \"public",
+    "source": "authored"
+
+  },
+
+  {
+    "id": "C-004",
     "cwe": "CWE-918 ",
     "secure_prompt": "def fetch_internal(url: str) -> str:\n    if",
     "insecure_prompt": "def fetch_internal(url: str) -> str:\n    return",
