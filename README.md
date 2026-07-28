@@ -1,23 +1,56 @@
 # Intent Analysis
 
-This repository contains a Jupyter Notebook-based project for exploring mechanistic interpretability in language models. The work focuses on using [TransformerLens](https://github.com/neelnanda-io/TransformerLens) with GPT-2 to inspect and analyze internal activations, attention patterns, and steering behavior for code-related prompts.
+This repository explores mechanistic interpretability of language models using
+[TransformerLens](https://github.com/neelnanda-io/TransformerLens), asking a specific question:
+does a model's internal preference for *secure* vs. *insecure* code change based on how a request
+is framed, rather than what is actually asked?
 
-## Project Overview
-
-The notebook in this repository investigates how a transformer model processes information internally by:
-
-- Find out the layer that is causing the activation.
-- Perform Intervention of the Layer.
-- Try the same thing on MLM (Medium language model)
-
-This work is framed around mechanistic interpretability and is intended as a practical exploration of how internal model components contribute to behavior.
+The benchmark centers on a single flagship scenario — a Terraform `aws_s3_bucket_acl` resource
+whose `acl` value diverges between `"private"` (secure) and `"public"` (insecure) — rewritten
+structurally and paired with different stated intents, then run through the same interpretability
+pipeline on two models side by side.
 
 ## Repository Structure
 
-- `MechInterp.ipynb` – main notebook containing the experiment pipeline and analysis.
-- `MechInterp_executed.ipynb` – executed version of the notebook with outputs preserved.
-- `dataset/vibecheck_dataset.json` – dataset file included in the repository.
-- `README.md` – project overview and usage instructions.
+- `MechInterp_better.ipynb` – benchmarking pipeline for **GPT-2-small** (12 layers, ~124M params).
+- `MechInterp_better _Qwen.ipynb` – the same pipeline for **Qwen2.5-1.5B-Instruct** (28 layers).
+- `dataset/Intent_Based_Data.json` – the 20-entry benchmark dataset (see below).
+- `intent_benchmark_table.csv` – latest per-scenario benchmark-table output.
+- `intent_per_scenario_benchmark.png` – per-scenario logit-lens / DLA plots.
+- `intent_batch_summary.png` – aggregate baseline logit diff and peak-layer distribution.
+- `intent_head_vs_mlp.png` – summed attention-head vs. MLP contribution, per scenario.
+- `README.md` – this file.
+
+## Dataset
+
+`dataset/Intent_Based_Data.json` holds 20 paired scenarios, all built around the same flagship
+`aws_s3_bucket_acl` resource, crossed along two axes:
+
+- **`variation_axis`** (4 values) — a structural/syntactic rewrite of the same resource block:
+  `naming`, `bucket_ref`, `formatting`, `context_distance`.
+- **`type` / `type_label`** (5 values, A–E) — an intent framing prepended via `intent_prefix`:
+  secure-stated, neutral, explicit directive, persona-driven, remediation-framed.
+
+Every entry also carries `cwe` (`CWE-732` — Incorrect Permission Assignment for Critical Resource,
+for all 20 entries) and `taxonomy_label` (e.g. `"Secure Intent, Insecure Output"`), describing the
+relationship between stated intent and code behavior that framing is designed to test.
+
+## Benchmarking Pipeline
+
+Both notebooks run the same four techniques on every scenario:
+
+1. **Baseline logit diff** — given only the shared context, does the model already prefer the
+   secure token over the insecure one, before any intervention?
+2. **Logit lens** — layer by layer, does the internal residual stream already encode a secure
+   preference, even where the final output doesn't show it?
+3. **DLA (direct logit attribution)** — at the layer where the effect is strongest, which
+   individual attention heads are pushing toward the insecure token?
+4. **MLP DLA** — at that same layer, how does the MLP's own contribution compare in sign and
+   magnitude to the summed effect of the attention heads?
+
+Each notebook walks through: Setup → Load the Benchmark Set → The Benchmarking Pipeline → Run the
+Benchmark → Benchmark Table → Per-Scenario Comparison → Aggregate Summary → Head-Sum vs. MLP
+Contribution Across Scenarios — with closing notes on how to interpret the results.
 
 ## Getting Started
 
@@ -32,20 +65,25 @@ This work is framed around mechanistic interpretability and is intended as a pra
    python -m venv .venv
    source .venv/bin/activate
    ```
-4.  Open the notebook:
-   ```bash
-   jupyter notebook
-   ```
-   
+
 3. Install the required dependencies:
    ```bash
    pip install -U pip
-   pip install torch transformers transformer_lens einops numpy matplotlib plotly jupyter
+   pip install torch transformers transformer_lens einops pandas matplotlib jupyter
    ```
-   
-5. Open `MechInterp.ipynb` and run the cells sequentially.
 
+4. Open a notebook:
+   ```bash
+   jupyter notebook
+   ```
+
+5. Run `MechInterp_better.ipynb` (GPT-2-small — runs comfortably on CPU) or
+   `MechInterp_better _Qwen.ipynb` (Qwen2.5-1.5B-Instruct — a 1.5B-parameter model; a GPU or
+   Apple-silicon MPS device is recommended) cell by cell. Each notebook downloads its own model
+   from Hugging Face on first run and reads `dataset/Intent_Based_Data.json`.
 
 ## Purpose
 
-This repository serves as Intent analysis framework for figuring out security threats that are produced by prompt engineering.
+This repository is an intent-analysis framework for studying whether models shift their security
+posture based on how a request is framed — i.e., risk introduced not by *what* is asked of a
+code-generation model, but by *how* it's asked.
