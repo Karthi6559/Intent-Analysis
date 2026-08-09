@@ -5,8 +5,8 @@ This repository explores mechanistic interpretability of language models using
 does a model's internal preference for *secure* vs. *insecure* code change based on how a request
 is framed, rather than what is actually asked?
 
-The benchmark centers on a single flagship scenario — a Terraform `aws_s3_bucket_acl` resource
-whose `acl` value diverges between `"private"` (secure) and `"public"` (insecure) — rewritten
+The benchmark centers on a single flagship scenario which is a Terraform `aws_s3_bucket_acl` resource
+whose `acl` value diverges between `"private"` (secure) and `"public"` (insecure) that is rewritten
 structurally and paired with different stated intents, then run through the same interpretability
 pipeline on two models side by side.
 
@@ -54,10 +54,9 @@ Contribution Across Scenarios — with closing notes on how to interpret the res
 
 ## Getting Started
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Karthi6559/Intent-Analysis.git
-   cd Intent-Analysis
+1. Downlaod the Zip file
+   ```
+   UnZip the file
    ```
 
 2. Create and activate a Python environment (recommended):
@@ -85,5 +84,5 @@ Contribution Across Scenarios — with closing notes on how to interpret the res
 ## Purpose
 
 This repository is an intent-analysis framework for studying whether models shift their security
-posture based on how a request is framed — i.e., risk introduced not by *what* is asked of a
+posture based on how a request is framed i.e., risk introduced not by *what* is asked of a
 code-generation model, but by *how* it's asked.
